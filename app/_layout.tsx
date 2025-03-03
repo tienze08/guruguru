@@ -44,6 +44,11 @@ export default function RootLayout() {
               <Stack.Screen name="quizz/index" options={{ headerShown: false }} />
               <Stack.Screen name="auth/signIn" options={{ headerShown: false }} />
               <Stack.Screen name="auth/signUp" options={{ headerShown: false }} />
+              <Stack.Screen name="practice/[type]/index" options={{ headerShown: false }} />
+              <Stack.Screen name="quiz/index" options={{ headerShown: false }} />
+              <Stack.Screen name="quiz/summaryQuiz" options={{ headerShown: false }} />
+              <Stack.Screen name="flashcards/index" options={{ headerShown: false }} />
+              <Stack.Screen name="questionAnswer/index" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="auto" />

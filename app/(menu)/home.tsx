@@ -1,7 +1,7 @@
-import { View, Text, Platform, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, Platform, ScrollView, RefreshControl, Image } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Header from '../component/home/header'
-import { Colors } from '@/constants/Colors'
+
 import NoCourse from '../component/home/noCourse'
 import { collection, DocumentData, getDocs, query, where } from 'firebase/firestore'
 import { UserDetailContext } from '@/app/context/userDetailContext'
@@ -9,6 +9,9 @@ import { db } from '@/config/firebaseConfig'
 import CoursesList from '../component/home/coursesList'
 import PracticeSection from '../component/home/practiceSection'
 import CoursesProgress from '../component/home/coursesProgress'
+import { Colors } from '@/constants/Colors'
+
+
 
 export default function Home() {
   const { userDetail } = useContext(UserDetailContext)
@@ -37,22 +40,24 @@ export default function Home() {
   return (
     <ScrollView 
       refreshControl={
-        <RefreshControl refreshing={loading} onRefresh={GetCourseList} />
+        <RefreshControl refreshing={loading} onRefresh={GetCourseList}/>
       }
       contentContainerStyle={{ flexGrow: 1 }}
       style={{
-        padding: 10,
         paddingTop: Platform.OS === 'ios' ? 45 : undefined,
         backgroundColor: Colors.WHITE
      }}>
-      <Header/>
-      
-      {courseList.length === 0 ? <NoCourse/> : 
       <View>
-        <CoursesProgress courseList={courseList}/>
-        <PracticeSection />
-        <CoursesList courseList={courseList}/>
-      </View>}
+        <Image source={require('../../assets/images/wave.png')} style = {{position:'absolute', width: '100%', height: 600}}></Image>
+        <Header/>
+        
+        {courseList.length === 0 ? <NoCourse/> : 
+        <View style={{padding: 10}}>
+          <CoursesProgress courseList={courseList}/>
+          <PracticeSection />
+          <CoursesList courseList={courseList}/>
+        </View>}
+      </View>
     </ScrollView>
   )
 }
