@@ -1,24 +1,33 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useContext } from 'react'
-import { Colors } from '@/constants/Colors'
-import { UserDetailContext } from '@/app/context/userDetailContext'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useContext } from 'react';
+import { ProfileMenu } from '@/constants/Option';
 import { useRouter } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { getAuth, signOut } from 'firebase/auth';
+import { Colors } from '@/constants/Colors';
+import { UserDetailContext } from '../context/userDetailContext';
 
-export default function Profile() {
-
-  const router = useRouter()
-
-  const menuItems = [
-    { title: "Add Course", icon: "plus", routers: "addCourse" },
-    { title: "My Courses", icon: "book-open", routers: "home" },
-    { title: "Course Progress", icon: "chart-line", routers: "progress" },
-    { title: "My Subscription", icon: "life-ring", routers: "" },
-    { title: "Logout", icon: "right-from-bracket", routers: "" },
-  ];
-
+export default function ProfileScreen() {
+  const router = useRouter();
+  const auth = getAuth();
 
   const { userDetail } = useContext(UserDetailContext);
+
+  const handlePress = async (path: string | undefined, name: string) => {
+    if (name === 'Logout') {
+      try {
+        await signOut(auth);
+        router.replace('/auth/signIn'); 
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    } else if (path) {
+      router.push(path as any);  
+    }
+  };
+
+  
+  
 
   return (
     <View style={styles.container}>
@@ -28,20 +37,29 @@ export default function Profile() {
         <Text style={styles.userInfo}>{userDetail?.name}</Text>
         <Text style={styles.userInfo}>{userDetail?.email}</Text>
 
-        <View style={styles.menuContainer}>
-          {menuItems.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.menuItem} onPress={() => router.push(item.routers)}>
+        <FlatList
+          data={ProfileMenu}
+          keyExtractor={(item) => item.name}
+          renderItem={({ item }) => (
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => handlePress(item.path, item.name)}
+              activeOpacity={0.7} 
+            >
               <View style={styles.iconContainer}>
-                <FontAwesome6 name={item.icon} size={24} color="blue" />
+                <Ionicons name={item.icon} size={24} color={Colors.PRIMARY} />
               </View>
-              <Text style={styles.menuText}>{item.title}</Text>
+              <Text style={styles.menuText}>{item.name}</Text>
+              <Ionicons name="chevron-forward-outline" size={24} color={Colors.GRAY} />
             </TouchableOpacity>
-          ))}
-        </View>
+          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+
 
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -75,20 +93,31 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 12, 
+    marginBottom: 10, 
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, 
   },
   iconContainer: {
-    width: 45,
-    height: 45,
-    borderWidth: 1,
-    borderColor: Colors.BG_GRAY,
+    width: 50,
+    height: 50,
     backgroundColor: Colors.BG_GRAY,
-    borderRadius: 10,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 15,
   },
   menuText: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'outfit-bold',
+    flex: 1, 
+  },
+  separator: {
+    height: 10, 
   },
 });

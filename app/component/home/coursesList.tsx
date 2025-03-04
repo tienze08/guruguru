@@ -8,14 +8,16 @@ import { useRouter } from 'expo-router';
 
 
 interface CoursesListProps {
-  courseList : DocumentData[]
+  courseList : DocumentData[],
+  heading?: string
+  enroll?: boolean
 }
 
-export default function CoursesList({courseList} : CoursesListProps) {
+export default function CoursesList({courseList, heading = "Courses", enroll = true} : CoursesListProps) {
   const router = useRouter()
   return (
     <View >
-      <Text style={{fontFamily : 'outfit-bold', fontSize: 25}}>Courses</Text>
+      <Text style={{fontFamily : 'outfit-bold', fontSize: 25}}>{heading}</Text>
       <FlatList data={courseList} 
         horizontal = {true}
         showsHorizontalScrollIndicator = {false}
@@ -24,7 +26,8 @@ export default function CoursesList({courseList} : CoursesListProps) {
             onPress={() => router.push({
               pathname: '/courseView',
               params: {
-                courseParams: JSON.stringify(item)
+                courseParams: JSON.stringify(item),
+                enroll: String(enroll)
               }
             })}>
             <Image source={imageAssets[item.banner_image]} style={{width:'100%', height: 150, borderRadius: 15}}></Image>

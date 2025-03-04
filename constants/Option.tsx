@@ -1,3 +1,5 @@
+import { Ionicons } from "@expo/vector-icons";
+
 export const PraticeOption = [
     {
         name: 'Quiz',
@@ -31,3 +33,34 @@ export const imageAssets : Record<string, any> = {
     '/banner6.png': require('./../assets/images/banner6.png'),
 
 };
+
+export const CourseCategory = ["Tech & Coding", "Business & Finance", "Health & Fitness", "Science & Engineering", "Arts & Creativity"]
+
+export const ProfileMenu: { name: string; icon: keyof typeof Ionicons.glyphMap; path: string }[] = [
+    {
+      name: 'Add Course',
+      icon: 'add-outline', 
+      path: '/addCourse'
+    },
+    {
+      name: 'My Course',
+      icon: 'book', 
+      path: '/(tabs)/home'
+    },
+    {
+      name: 'Course Progress',
+      icon: 'analytics-outline', 
+      path: '/(tabs)/progress'
+    },
+    {
+      name: 'My Subscription',
+      icon: 'shield-checkmark', 
+      path: ''
+    },
+    {
+      name: 'Logout',
+      icon: 'log-out', 
+      path: '/login'
+    }
+  ];
+  

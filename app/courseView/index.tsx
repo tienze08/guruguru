@@ -8,7 +8,7 @@ import { db } from '@/config/firebaseConfig';
 import { useEffect, useState } from 'react';
 
 export default function CourseView() {
-  const { courseParams, courseId, refresh } = useLocalSearchParams();
+  const { courseParams, courseId, refresh, enroll } = useLocalSearchParams();
   const [course, setCourse] = useState<DocumentData>({}); 
 
   useEffect(() => {
@@ -18,6 +18,8 @@ export default function CourseView() {
         setCourse(typeof courseParams === 'string' ? JSON.parse(courseParams) : courseParams);
     }
   }, [courseId]);
+
+  const parsedEnroll = enroll === 'true' ? true : false;
 
   const GetCourseById = async () => {
     if (!courseId || Array.isArray(courseId)) return;
@@ -30,7 +32,7 @@ export default function CourseView() {
     <ScrollView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
       {Object.keys(course).length > 0 ? ( 
         <>
-          <Intro course={course} />
+          <Intro course={course} enroll = {parsedEnroll}/>
           <Chapter course={course} />
         </>
       ) : (
